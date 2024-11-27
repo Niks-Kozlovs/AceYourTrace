@@ -94,7 +94,6 @@ function showPosition(position) {
 
 function errorCallback(error) {
     if (error.code == error.PERMISSION_DENIED) {
-        showChooseButton();
         const x = document.getElementById('error');
         x.innerHTML = "Location denied by user";
     }
@@ -104,14 +103,9 @@ function getLocation() {
     if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(showPosition, errorCallback);
     } else {
-        showChooseButton();
         const x = document.getElementById('error');
         x.innerHTML = "Geolocation is not supported by this browser.";
     }
-}
-
-function sendLocation() {
-    getLocation();
 }
 
 function toggleMap(status) {
@@ -126,26 +120,19 @@ function letClickOnMap() {
 }
 
 function showMap() {
-    const form = document.getElementById('parametr_div');
-    const buttons = document.getElementById('ChooseButton');
-    const mapButtons = document.getElementById('mapButtons');
-    toggleMap(false);
+    const setupPanel = document.querySelector('.setup-panel-wrapper');
+    const mapView = document.querySelector('.map-view');
 
-    form.style.height = 0;
-    buttons.style.height = 0;
-    mapButtons.style.height = 'auto';
+    setupPanel.classList.add('hidden');
+    mapView.classList.remove('hidden');
 }
 
-function showSettings() {
-    toggleMap(true);
-    showChooseButton();
-    const form = document.getElementById('parametr_div');
-    form.style.height = 'initial';
-}
+function showSetup() {
+    const setupPanel = document.querySelector('.setup-panel-wrapper');
+    const mapView = document.querySelector('.map-view');
 
-function showChooseButton() {
-    const buttons = document.getElementById('ChooseButton');
-    buttons.style.height = 'initial';
+    setupPanel.classList.remove('hidden');
+    mapView.classList.add('hidden');
 }
 
 function getHeight(point) {
@@ -431,10 +418,6 @@ function makeDistance() {
     }
 }
 
-function showPopUp() {
-
-}
-
 function startRun() {
     const button = document.getElementById('goButton');
     if (running) {
@@ -444,9 +427,6 @@ function startRun() {
         button.innerHTML = 'Go!';
         showPopUp();
         selectedRoute = null;
-        showChooseButton();
-
-
         return;
     }
 
@@ -546,4 +526,26 @@ function generatePath() {
                 makePath(point);
             })
         });
+}
+
+
+function preventNonNumericInput(event) {
+    const key = event.keyCode;
+    if (key < 48 || key > 57) {
+        event.preventDefault();
+    }
+}
+
+function clampNumber(object) {
+    const intValue = parseInt(object.value);
+
+    const minValue = parseInt(object.min);
+    if (minValue && intValue < minValue) {
+        object.value = object.min;
+    }
+
+    const maxValue = parseInt(object.max);
+    if (maxValue && intValue > maxValue) {
+        object.value = object.max;
+    }
 }

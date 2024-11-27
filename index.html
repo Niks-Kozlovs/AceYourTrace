@@ -2,59 +2,54 @@
 <html>
 
 <head>
-   <title>Galvena lapa </title>
+   <title>Galvena lapa</title>
+   <link rel="stylesheet" type="text/css" href="./css/reset.css">
    <link rel="stylesheet" type="text/css" href="./css/style.css">
-   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
-      integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+   <link rel="stylesheet" type="text/css" href="./js/Leaflet/leaflet.css" />
    <meta charset="UTF-8">
-   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
    <meta name="viewport" content="width=device-width, initial-scale=1">
-   <!-- Font Awesome -->
-   <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css">
+   <script type='text/javascript' src='./js/Leaflet/leaflet.js'></script>
 </head>
 
 <body>
-   <p style="font-size:30px;cursor:pointer" onclick="toggleNav()" class="burgerMenu">☰</p>
-
-   <div id="myNav" class="overlay">
-      <div style="display:flex;flex-direction: row-reverse;">
-         <div style="background-color:transparent"><a href="javascript:void(0)" class="closebtn" onclick="toggleNav()">&times;</a></div>
-         <div class="logo-header"><a href="index.html"><img src="./img/logo.png" height="100" alt=""></a></div>
-      </div>
-
-      <div class="overlay-content">
-         <a href="#">Settings</a>
-         <a href="#">Contact</a>
-         <a href="#">Personal info</a>
-      </div>
+   <div class="splash-screen">
+      <img src="./img/logo.png" height="100" alt="Logo">
+      <h1>Ace Your Trace</h1>
    </div>
 
-   <div class="logo-pop">
-      <div class="logo-time"><img src="./img/logo.png" height="100" alt="">
-         <h5 class="h5 text-center font-weight-bold">Ace Your Trace</h5>
+   <main class="main-content">
+      <!-- Initial View -->
+      <div class="setup-panel-wrapper">
+         <div class="setup-panel">
+            <h2>Plan Your Route</h2>
+            <div class="input-group">
+               <label>Distance</label>
+               <input type="number" min="1" max="10" value="1" step="1" onkeypress="preventNonNumericInput(event)"
+                  oninput="clampNumber(this)">
+               <select onchange="changeType()">
+                  <option value="KM">KM</option>
+                  <option value="H">Hours</option>
+               </select>
+            </div>
+            <label>Starting Point</label>
+            <div class="location-group">
+               <button onclick="getLocation()">Use Current Location</button>
+               <button onclick="showMap()">Select on Map</button>
+            </div>
+         </div>
       </div>
-   </div>
 
 
-   <div class="d-flex button-block">
-      <div class="container-button">
-         <div class="col-5 mb-3"><a href="./route_configuration.html"><button
-                  class="btn btn-success btn-width">Start</button></a></div>
-         <div class="col-6"><a><button class="btn btn-success btn-width">History</button></a></div>
+      <!-- Map View (Initially Hidden) -->
+      <div class="map-view hidden">
+         <div class="sidebar">
+            <button onclick="showSetup()">← Back</button>
+         </div>
+         <div id="map"></div>
       </div>
-   </div>
+   </main>
 
-   <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
-      integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous">
-   </script>
-   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
-      integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous">
-   </script>
-   <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
-      integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous">
-   </script>
-   <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
-   <script src="./js/index_functions.js"></script>
+   <script src="./js/main.js"></script>
 </body>
 
 </html>
