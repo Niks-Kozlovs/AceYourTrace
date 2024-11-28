@@ -8,7 +8,7 @@ export default class Settings {
     }
 
     get distance() {
-        if (type === 'KM') {
+        if (this.type === 'KM') {
             return this.value * 1000;
         } else {
             return this.value * 5 * 1000;

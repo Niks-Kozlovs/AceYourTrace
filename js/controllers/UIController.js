@@ -33,7 +33,7 @@ export default class UIController {
 
     async onGetLocation() {
         if ("geolocation" in navigator === false) {
-            document.getElementById('error').textContent = error.message;
+            document.getElementById('error').textContent = "Geolocation not available";
             return;
         }
 
@@ -58,14 +58,24 @@ export default class UIController {
     }
 
     onLocationSet() {
-        console.log('Location set');
         const actionButton = document.getElementById('actionButton');
         actionButton.disabled = false;
         actionButton.textContent = 'Preview Routes';
-        actionButton.addEventListener('click', this.onPreviewClicked, { once: true });
+        actionButton.addEventListener('click', this.onPreviewClicked.bind(this), { once: true });
     }
 
-    onPreviewClicked() {
-        console.log('Preview clicked');
+    async onPreviewClicked() {
+        const actionButton = document.getElementById('actionButton');
+        actionButton.disabled = true;
+        actionButton.textContent = 'Generating Routes...';
+
+        this.settings.isMapInteractable = false;
+        this.mapController.removeLocationMarker();
+
+        const routes = await this.routingService.generateRoutes(4);
+        actionButton.disabled = false;
+        actionButton.textContent = 'Preview Routes';
+
+        this.mapController.addRoutes(routes);
     }
 }
