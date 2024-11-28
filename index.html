@@ -18,38 +18,31 @@
    </div>
 
    <main class="main-content">
-      <!-- Initial View -->
-      <div class="setup-panel-wrapper">
-         <div class="setup-panel">
+      <div class="map-view">
+         <aside class="sidebar">
+            <img src="./img/logo.png" alt="Logo" class="sidebar-logo">
             <h2>Plan Your Route</h2>
             <div class="input-group">
                <label>Distance</label>
-               <input type="number" min="1" max="10" value="1" step="1" onkeypress="preventNonNumericInput(event)"
+               <input id="distanceInput" type="number" min="1" max="10" value="1" step="1" onkeypress="preventNonNumericInput(event)"
                   oninput="clampNumber(this)">
-               <select onchange="changeType()">
+               <select id="typeInput">
                   <option value="KM">KM</option>
                   <option value="H">Hours</option>
                </select>
             </div>
             <label>Starting Point</label>
-            <div class="location-group">
-               <button onclick="getLocation()">Use Current Location</button>
-               <button onclick="showMap()">Select on Map</button>
-            </div>
-         </div>
-      </div>
-
-
-      <!-- Map View (Initially Hidden) -->
-      <div class="map-view hidden">
-         <div class="sidebar">
-            <button onclick="showSetup()">← Back</button>
-         </div>
+            <button id="getLocationBtn">Use Current Location</button>
+            <p>You can also click on the map to select your starting location.</p>
+            <p id="error"></p>
+            <button id="actionButton" disabled>Preview Routes</button>
+         </aside>
          <div id="map"></div>
       </div>
    </main>
 
-   <script src="./js/main.js"></script>
+   <script type="module" src="./js/app.js"></script>
+   <script src="./js/util/formatters.js"></script>
 </body>
 
 </html>

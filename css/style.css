@@ -33,25 +33,6 @@
     --hunter-green: #34603c;
 }
 
-.setup-panel-wrapper {
-	position: absolute;
-	top: 50px;
-	left: 0;
-	right: 0;
-	display: flex;
-	justify-content: center;
-	opacity: 1;
-	transition: opacity 0.3s ease-in-out;
-}
-
-.setup-panel {
-	max-width: 600px;
-	padding: 2rem;
-	background: var(--color-background);
-	box-shadow: var(--shadow-background);
-	border-radius: 20px;
-}
-
 .location-group {
 	display: flex;
 	gap: 1rem;
@@ -67,7 +48,6 @@
 	transition: opacity 0.3s ease-in-out;
 	background: var(--color-background);
 	border-radius: 20px;
-	box-shadow: var(--clay-shadow);
 }
 
 #map {
@@ -75,9 +55,25 @@
 }
 
 .sidebar {
-	width: 300px;
-	padding: 2rem;
+	padding: 1rem;
+	background: var(--color-background);
+	box-shadow: var(--shadow-background);
 	border-radius: 20px;
+	display: flex;
+	flex-direction: column;
+	gap: 1rem;
+	height: 100%;
+}
+
+/* Style for the sidebar logo */
+.sidebar-logo {
+    width: 120px;
+    height: auto;
+    align-self: center;
+}
+
+#actionButton {
+    margin-top: auto;
 }
 
 .splash-screen {
@@ -94,7 +90,6 @@
 	z-index: 1000;
 	animation: fadeOut 1s ease-in-out forwards;
 	border-radius: 20px;
-	box-shadow: var(--clay-shadow);
 }
 
 @keyframes fadeOut {
@@ -112,12 +107,9 @@
 	}
 }
 
-.setup-panel-wrapper.hidden,
-.map-view.hidden {
-	opacity: 0;
-	pointer-events: none;
-}
 
+/* TODO: use https://neumorphism.io/#5f6150 and create animations */
+/* Note: The top left and bottom right corner should change colors instead of the gradient moving somewhere */
 button {
     background: var(--color-button);
     box-shadow: var(--shadow-background-small);
@@ -126,15 +118,22 @@ button {
     font-size: 1rem;
     font-weight: bold;
     padding: 0.75rem 1.5rem;
-    color: var(--bone);
+    color: var(--color-text);
 }
 
-button:hover {
-    background: var(--color-button-hover);
+button:disabled {
+	background: #d1d1d1;
+	color: #888;
+	cursor: not-allowed;
+	box-shadow: none;
 }
 
-button:active {
-    box-shadow: var(--shadow-button-pressed);
+button:hover:not(:disabled) {
+	background: var(--color-button-hover);
+}
+
+button:active:not(:disabled) {
+	box-shadow: var(--shadow-button-pressed);
 }
 
 .input-group input,
