@@ -34,13 +34,16 @@ export default class RoutingService {
     const rightPoint = this.calculateEndPoint(midPoint, halfDistance, -90);
 
     const currentRoute = await this.fetchRoute([location, leftPoint, midPoint, rightPoint, location]);
+    if (!currentRoute) {
+      throw new Error('Failed to fetch route');
+    }
 
     if (depth > 3) {
       return currentRoute;
     }
 
     const distanceDiscrepancy = Math.abs(currentRoute.distance - this.settings.distance);
-    const maxAllowedDiscrepancy = this.settings.distance * 0.1;
+    const maxAllowedDiscrepancy = this.settings.distance * 0.05;
 
     if (distanceDiscrepancy < maxAllowedDiscrepancy) {
       return currentRoute;

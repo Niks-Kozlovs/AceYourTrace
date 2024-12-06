@@ -84,8 +84,13 @@ export default class UIController {
             const routes = await this.routingService.generateRoutes();
             this.mapController.addRoutes(routes);
         } else {
-            const routes = await this.routingService.generateCircularRoute();
-            this.mapController.addRoutes([routes]);
+            try {
+                const routes = await this.routingService.generateCircularRoute();
+                this.mapController.addRoutes([routes]);
+            } catch (error) {
+                console.error('Failed to generate circular route:', error);
+                document.getElementById('error').textContent = 'Failed to generate route';
+            }
         }
 
         actionButton.disabled = true;
