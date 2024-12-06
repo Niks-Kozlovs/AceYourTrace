@@ -11,19 +11,22 @@ export default class UIController {
         document.getElementById('distanceInput').addEventListener('change', this.onDistanceChange.bind(this));
         document.getElementById('typeInput').addEventListener('change', this.onTypeChange.bind(this));
         document.getElementById('getLocationBtn').addEventListener('click', this.onGetLocation.bind(this));
+        document.getElementById('routeTypeInput').addEventListener('change', this.onRouteTypeChange.bind(this));
         this.settings.addEventListener('locationChanged', this.onLocationSet.bind(this));
     }
 
     setInitialValues() {
         const initialValue = document.getElementById('distanceInput').value
         const initialType = document.getElementById('typeInput').value;
+        const initialTrip = document.getElementById('routeTypeInput').value;
         this.settings.value = initialValue;
         this.settings.type = initialType;
+        this.settings.trip = initialTrip;
     }
 
     onDistanceChange(event) {
-        const distance = parseInt(event.target.value) * 1000;
-        this.settings.setValue(distance);
+        const distance = parseInt(event.target.value);
+        this.settings.value = distance;
     }
 
     onTypeChange(event) {
@@ -38,6 +41,11 @@ export default class UIController {
         }
 
         navigator.geolocation.getCurrentPosition(this.onLocationResolved, this.onLocationRejected);
+    }
+
+    onRouteTypeChange(event) {
+        const routeType = event.target.value;
+        this.settings.trip = routeType;
     }
 
     onLocationResolved(position) {
@@ -72,10 +80,15 @@ export default class UIController {
         this.settings.isMapInteractable = false;
         this.mapController.removeLocationMarker();
 
-        const routes = await this.routingService.generateRoutes(4);
+        if (this.settings.trip === 'a-to-b') {
+            const routes = await this.routingService.generateRoutes();
+            this.mapController.addRoutes(routes);
+        } else {
+            const routes = await this.routingService.generateCircularRoute();
+            this.mapController.addRoutes([routes]);
+        }
+
         actionButton.disabled = false;
         actionButton.textContent = 'Preview Routes';
-
-        this.mapController.addRoutes(routes);
     }
 }

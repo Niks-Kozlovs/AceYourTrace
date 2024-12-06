@@ -2,6 +2,7 @@ export default class Settings {
     constructor() {
       this.value = 1;
       this.type = 'KM';
+      this.trip = 'a-to-b';
       this._location = L.latLng(56.5033914, 21.0085047);
       this.isMapInteractable = true;
       this.listeners = [];
@@ -13,6 +14,10 @@ export default class Settings {
         } else {
             return this.value * 5 * 1000;
         }
+    }
+
+    get distanceKM() {
+        return (this.distance / 1000).toFixed(2);
     }
 
 

@@ -1,6 +1,3 @@
-import { getBoundingBox } from '../util/GeoUtils.js';
-
-const OVERPASS_API_URL = 'https://overpass-api.de/api/interpreter';
 const GRAPHHOPPER_API_URL = 'https://graphhopper.com/api/1/route';
 
 export default class RoutingService {
@@ -9,37 +6,57 @@ export default class RoutingService {
     this.apiKey = apiKey;
   }
 
-  // async fetchNearbyPoints(location, distance) {
-  //   const bbox = getBoundingBox(location, distance / 2).join(',');
-  //   const query = `
-  //     [out:json];
-  //     (way["highway"](${bbox}); node(w););
-  //     out geom;
-  //   `;
-  //   const url = `${OVERPASS_API_URL}?data=${encodeURIComponent(query)}`;
-  //   const response = await fetch(url);
-  //   const data = await response.json();
-  //   return data.elements.filter(el => el.type === 'node').map(el => ({
-  //     lat: el.lat,
-  //     lng: el.lon,
-  //   }));
-  // }
-
-  async generateRoutes(routeCount) {
+  async generateRoutes(routeCount = 4) {
     const { location, distance } = this.settings;
-    // const nearbyPoints = await this.fetchNearbyPoints(location, distance);
 
     const routePromises = [];
-    for (let degree = 0; degree < 360; degree += 360/routeCount) {
+    for (let degree = 0; degree < 360; degree += 360 / routeCount) {
       const endPoint = this.calculateEndPoint(location, distance, degree);
       routePromises.push(this.fetchRoute([location, endPoint]));
     }
 
     const routes = await Promise.all(routePromises);
-    return routes.filter(route => route !== null);
+    routes.forEach(route => {
+      return this.pruneRoute(route, distance);
+    });
+    return routes;
   }
 
-  //Moves a point a certain distance in a certain direction
+  async generateCircularRoute(magicNumber = 1, depth = 0) {
+    const { location, distance } = this.settings;
+    const halfDistance = distance / magicNumber;
+
+    // Calculate the midpoint
+    const midPoint = this.calculateEndPoint(location, halfDistance, 0);
+
+    // Calculate left and right points to form a circular shape
+    const leftPoint = this.calculateEndPoint(midPoint, halfDistance, 90);
+    const rightPoint = this.calculateEndPoint(midPoint, halfDistance, -90);
+
+    const currentRoute = await this.fetchRoute([location, leftPoint, midPoint, rightPoint, location]);
+
+    if (depth > 3) {
+      return currentRoute;
+    }
+
+    const distanceDiscrepancy = Math.abs(currentRoute.distance - this.settings.distance);
+    const maxAllowedDiscrepancy = this.settings.distance * 0.1;
+
+    if (distanceDiscrepancy < maxAllowedDiscrepancy) {
+      return currentRoute;
+    }
+
+    const distanceFactor = currentRoute.distance / this.settings.distance;
+    const newRoute = await this.generateCircularRoute(magicNumber * distanceFactor, depth + 1);
+
+
+    const deltaDistanceNewRoutes = Math.abs(distance - newRoute.distance);
+    const deltaDistanceCombinedRoute = Math.abs(distance - currentRoute.distance);
+
+    const isCurrentRouteOptimal = deltaDistanceCombinedRoute < deltaDistanceNewRoutes;
+    return isCurrentRouteOptimal ? currentRoute : newRoute;
+  }
+
   calculateEndPoint(start, distance, degree) {
     const radians = (Math.PI / 180) * degree;
     const deltaLat = Math.cos(radians) * (distance / 111320); // Approximate
@@ -59,5 +76,29 @@ export default class RoutingService {
       return data.paths[0];
     }
     return null;
+  }
+
+  pruneRoute(route, maxDistance) {
+    const instructions = route.instructions;
+    route.instructions.pop();
+
+    while (instructions.length > 0) {
+      const lastInstruction = instructions[instructions.length - 1];
+      const newRouteDistance = route.distance - lastInstruction.distance;
+      const newDeltaDistance = Math.abs(newRouteDistance - maxDistance);
+      const currDeltaDistance = Math.abs(route.distance - maxDistance);
+
+      if (newDeltaDistance >= currDeltaDistance) {
+        break;
+      }
+
+      instructions.pop();
+      route.points.coordinates.splice(
+        lastInstruction.interval[0],
+        lastInstruction.interval[1] - lastInstruction.interval[0] + 1
+      );
+      route.distance = newRouteDistance;
+      route.time = route.time - lastInstruction.time;
+    }
   }
 }
