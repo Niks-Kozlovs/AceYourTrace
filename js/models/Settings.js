@@ -4,7 +4,6 @@ export default class Settings {
       this.type = 'KM';
       this.trip = 'a-to-b';
       this._location = L.latLng(56.5033914, 21.0085047);
-      this.isMapInteractable = true;
       this.listeners = [];
     }
 

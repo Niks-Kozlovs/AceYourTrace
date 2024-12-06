@@ -28,19 +28,20 @@ export default class MapController {
         }
     }
 
+    removeRoutes() {
+        this.map.eachLayer(layer => {
+            if (layer instanceof L.Polyline) {
+                this.map.removeLayer(layer);
+            }
+        });
+    }
+
     updateMapView() {
         this.removeLocationMarker();
-
-        if (this.settings.isMapInteractable) {
-            this.marker = L.marker(this.settings.location).addTo(this.map);
-        }
+        this.marker = L.marker(this.settings.location).addTo(this.map);
     }
 
     onMapClick(event) {
-        if (this.settings.isMapInteractable === false) {
-            return;
-        }
-
         this.settings.location = event.latlng;
         this.updateMapView();
     }

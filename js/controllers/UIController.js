@@ -77,8 +77,8 @@ export default class UIController {
         actionButton.disabled = true;
         actionButton.textContent = 'Generating Routes...';
 
-        this.settings.isMapInteractable = false;
         this.mapController.removeLocationMarker();
+        this.mapController.removeRoutes();
 
         if (this.settings.trip === 'a-to-b') {
             const routes = await this.routingService.generateRoutes();
@@ -88,7 +88,7 @@ export default class UIController {
             this.mapController.addRoutes([routes]);
         }
 
-        actionButton.disabled = false;
+        actionButton.disabled = true;
         actionButton.textContent = 'Preview Routes';
     }
 }
