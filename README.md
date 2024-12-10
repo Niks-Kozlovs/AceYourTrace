@@ -8,11 +8,11 @@
     <p align="center">
         An interactive web application to generate personalized walking routes during the COVID-19 pandemic.
         <br />
-        <a href="https://github.com/YourUsername/AceYourTrace">View Demo</a>
+        <a href="https://github.com/Niks-Kozlovs/AceYourTrace/tree/master">View original</a>
         ·
-        <a href="https://github.com/YourUsername/AceYourTrace/issues">Report Bug</a>
+        <a href="https://github.com/Niks-Kozlovs/AceYourTrace/issues">Report Bug</a>
         ·
-        <a href="https://github.com/YourUsername/AceYourTrace/issues">Request Feature</a>
+        <a href="https://github.com/Niks-Kozlovs/AceYourTrace/issues">Request Feature</a>
     </p>
 </div>
 
@@ -38,12 +38,13 @@
 </details>
 
 ## About The Project
-
-![Product Screenshot][product-screenshot]
+https://github.com/user-attachments/assets/ff25b70e-e6ea-401d-9c13-d7c367ec3df1
 
 "Ace Your Trace" is an interactive web application developed during a weekend hackathon, aimed at providing users with personalized walking routes during the COVID-19 pandemic. With many places closed and people confined to limited areas, this app helps users explore their surroundings by generating routes based on their desired distance. Users can specify path preferences such as nature trails or beachside walks, as well as choose difficulty levels ranging from easy routes with flat terrain to challenging paths with significant elevation changes.
 
 Due to the hackathon's time constraints, the application focuses on generating routes based on user-defined distance. Users can select their starting point on an interactive map or use their current location, input their desired distance, and receive an optimal route for their walk.
+
+As the lead developer on the team, I was responsible for the core functionality and architecture of the application. Our innovative solution earned third place in the hackathon competition.
 
 ## Features
 
