@@ -1,4 +1,4 @@
-const BACKEND_URL = '/api/routes';
+const BACKEND_URL = './api/routes';
 
 export default class RoutingService {
   constructor(settings) {

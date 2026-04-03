@@ -14,10 +14,11 @@ app.use(express.json());
 
 app.use('/api/routes', apiRoutes);
 
-app.use(express.static(path.join(__dirname, '../frontend')));
+const frontendPath = path.resolve(__dirname, '../frontend');
+app.use(express.static(frontendPath));
 
 app.get('/*all', (req, res) => {
-    res.sendFile(path.join(__dirname, '../frontend/index.html'));
+    res.sendFile(path.join(frontendPath, 'index.html'));
 });
 
 const PORT = process.env.PORT || 3000;
