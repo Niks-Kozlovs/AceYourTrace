@@ -44,7 +44,7 @@ export async function fetchGraphHopperRoute(points) {
         const response = await axios.get(url);
         return response.data.paths[0];
     } catch (error) {
-        console.error("GraphHopper API Error");
+        console.error("GraphHopper API Error:", error.response ? error.response.data : error.message);
         return null;
     }
 }
