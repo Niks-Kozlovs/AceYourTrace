@@ -8,6 +8,6 @@ import UIController from './controllers/UIController.js';
 document.addEventListener('DOMContentLoaded', () => {
     const settings = new Settings();
     const mapController = new MapController(settings);
-    const routingService = new RoutingService(settings, '<API_KEY>');
+    const routingService = new RoutingService(settings);
     const uiController = new UIController(settings, mapController, routingService);
 });
